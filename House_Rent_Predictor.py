@@ -12,12 +12,15 @@ with open('Model_Prediction_Dataset.pkl', 'rb') as file:
     df = pickle.load(file)
 
 # Load prediction pipeline with caching
-@st.cache_resource
 def load_pipeline():
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        with lzma.open('House_Rent_Prediction_Pipeline.xz' , 'rb') as file:
-            return pickle.load(file)
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            with lzma.open('House_Rent_Prediction_Pipeline.xz', 'rb') as file:
+                return pickle.load(file)
+    except Exception as e:
+        st.error(f"❌ Error loading model pipeline: {e}")
+        return None
 
 pipeline = load_pipeline()
 
